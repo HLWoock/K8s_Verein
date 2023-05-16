@@ -1,0 +1,84 @@
+= Verein  --  REST-API
+Hermann Woock <Hermann.Woock@oose.de>
+v1.0.0, 
+:toc: right
+:toc-title: Inhalt
+:toclevels: 3
+:icons: font
+:imagesdir: assets/images
+:homepage: http://asciidoctor.org
+  
+
+[introduction]
+== Einleitung
+  Der Verein verwaltet seine Mitglieder. Es können alle Mitglieder eingesehen werden. Mitglieder können hinzugefügt werden oder einzelne Mitglieder anhand ihrer Mitgliedernummer identifiziert werden. Zu jedem Mitglied existiert auch dessen Adresse. Diese kann ebenso abgefragt werden.
+
+IMPORTANT: Alle Adressen werden per HATEOAS/HAL übertragen.
+  
+NOTE: Die Mitglieder Verwaltung ist auf REST-Aufrufe für Rich Clients ausgelegt. Für andere Anforderungen muss ein weiterer Controller angelegt werden.
+
+[[overview-http-verbs]]
+== HTTP Verben
+  FuhrparkAdapter tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
+
+|===
+  | Verb | Usage
+
+  | `GET`
+  | Used to retrieve a resource
+
+  | `POST`
+  | Used to create a new resource
+
+  | `PATCH`
+  | Used to update an existing resource, including partial updates
+
+  | `PUT`
+  | Used to update an existing resource, full updates only
+
+  | `DELETE`
+  | Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP Status Codes
+  Station-service tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
+
+|===
+  | Status code | Usage
+
+  | `200 OK`
+  | Standard response for successful HTTP reqüsts.
+   The actual response will depend on the reqüst method used.
+   In a GET reqüst, the response will contain an entity corresponding to the reqüsted resource.
+   In a POST reqüst, the response will contain an entity describing or containing the result of the action.
+
+  | `201 Created`
+  | The reqüst has been fulfilled and resulted in a new resource being created.
+
+  | `204 No Content`
+  | The server successfully processed the reqüst, but is not returning any content.
+
+  | `400 Bad Request`
+  | The server cannot or will not process the reqüst dü to something that is perceived to be a client error (e.g., malformed reqüst syntax, invalid reqüst message framing, or deceptive reqüst routing).
+
+  | `404 Not Found`
+  | The reqüsted resource could not be found but may be available again in the future. Subseqünt reqüsts by the client are permissible.
+|===
+
+[[resources]]
+== Resourcen
+
+[[resource-mitglied]]
+=== Mitglied
+
+ Ein Mitglied hat Informationen zu seinem Namen und seiner Adresse.
+
+[[resource-alle-mitglieder]]
+==== alle
+
+Ein 'GET' Reqüst auf die Mitglieder gibt eine Liste aller Mitglieder zurück
+
+WARNING: Die Menge der Mitglieder kann sehr viel werden und sollte deshalb eingeschränkt werden, um das Netzwerk nicht zu sehr zu belasten.
+
+

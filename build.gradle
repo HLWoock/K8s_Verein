@@ -1,0 +1,139 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
+	/*id 'org.springframework.cloud.contract' version '4.0.2'*/
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'org.asciidoctor.jvm.pdf' version '3.3.2'
+	id 'org.asciidoctor.jvm.gems' version '3.3.2'
+}
+
+group = 'de.woock'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+	set('springCloudVersion', "2022.0.2")
+	set('testcontainersVersion', "1.17.6")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'org.asciidoctor:asciidoctorj-pdf:2.3.4'
+    implementation "org.asciidoctor:asciidoctorj-diagram:2.2.4"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.11.0"
+    implementation "com.fasterxml.jackson.core:jackson-core:2.11.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.11.0"
+    implementation 'net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.2'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+    implementation 'com.github.loki4j:loki-logback-appender:1.4.0'
+	
+	compileOnly 'org.projectlombok:lombok'
+	
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+//	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mariadb'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'	
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+
+jar {
+      baseName = 'mitglieder-verwaltung'
+      version = '0.0.1-SNAPSHOT'
+      dependsOn asciidoctor
+      from ("${asciidoctor.outputDir}/") {
+          into 'static/docs'
+      }
+}
+
+asciidoctor{ 
+  outputOptions { 
+    backends 'html5'
+  }
+  attributes 'snippets': snippetsDir
+  inputs.dir snippetsDir
+  outputDir "build/asciidoc"
+  dependsOn test
+  sourceDir 'src/main/asciidoc'
+}
+
+
+asciidoctorPdf {
+    sourceDir 'src/main/asciidoc'
+	dependsOn asciidoctorGemsPrepare
+	baseDirFollowsSourceFile()
+	asciidoctorj {
+	  requires 'rouge'
+	  attributes 'build-gradle': file('build.gradle'),
+		  'sourcedir': project.sourceSets.main.java.srcDirs[0],
+		  'endpoint-url': 'http://example.org',
+		  'source-highlighter': 'rouge',
+		  'imagesdir': './images',
+		  'toc': 'left',
+		  'icons': 'font',
+		  'idprefix': '',
+		  'idseparator': '-'
+	}
+}
+bootBuildImage{ 
+  imageName = "oosemicro/k8s-verein:0.5.0"
+}
+
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+/*
+contracts {
+}
+*/
+
+/*
+tasks.named('contractTest') {
+	useJUnitPlatform()
+}
+*/
+

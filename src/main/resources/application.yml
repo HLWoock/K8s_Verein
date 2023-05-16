@@ -1,0 +1,69 @@
+debug: false
+
+info:
+  app: StattAuto Verein
+  author: Hermann Woock
+  created: 07.04.2023
+
+server:
+  port: 8081
+  
+spring:
+  application:
+    name: Verein
+  mvc:
+    log-request-details: false
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: admin
+    url: jdbc:mariadb://mariadb:3306/k8s_verein
+  jpa:
+    properties:
+      hibernate:
+        '[dialect:org.hibernate.dialect]': MariaDB103Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+  main:
+    allow-bean-definition-overriding: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    info:
+      enabled: true
+    env:
+      enabled: true
+    health:
+      probes:
+        enabled: true 
+      show-details: always
+      show-components: always
+  metrics:
+    tags:
+      application: verein
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requestes: true
+  tracing:
+    sampling:
+      probability: 1
+  zipkin:
+    tracing:
+      endpoint: http://${TEMPO_HOST:localhost}:${TEMPO_PORT:9411}/api/v2/spans
+
+logging:
+  pattern:
+    level: '%5p[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
