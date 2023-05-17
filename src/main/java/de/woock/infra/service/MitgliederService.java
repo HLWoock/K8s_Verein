@@ -33,6 +33,11 @@ public class MitgliederService {
 		return mitgliederRepository.findById(id)
 	                               .orElseThrow(() -> new MitgliedNichtGefundenException(id));
 	}
+	
+	public Mitglied mitglied(String username) {
+		return mitgliederRepository.findByUsernameIgnoreCase(username)
+				                   .orElseThrow(() -> new MitgliedNichtGefundenException(username));
+	}
 
 	public Page<Mitglied> mitglieder(Integer page){
 		 Page<Mitglied> paged = mitgliederRepository.findAll(PageRequest.of(page, 10, Sort.by("name", "vorname")));
@@ -46,12 +51,12 @@ public class MitgliederService {
 	}
 
 	public Mitglied aufnehmen(@Valid MitgliedsAntrag antrag) {
-		mitgliederRepository.findByUsernameIgnoreCase(antrag.name()) 
+		mitgliederRepository.findByUsernameIgnoreCase(antrag.username()) 
 		                    .ifPresent(mitglied -> { 
-		                    	throw new MitgliedSchonVorhandenException(antrag.name());
+		                    	throw new MitgliedSchonVorhandenException(antrag.username());
 		                    });
 		
-		log.debug(String.format("Neues Mitglied aufgenommen {Username: %s}", antrag.name()));
+		log.debug(String.format("Neues Mitglied aufgenommen {Username: %s}", antrag.username()));
 		return mitgliederRepository.save(new Mitglied(antrag));
 	}
 

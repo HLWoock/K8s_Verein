@@ -2,7 +2,7 @@ package de.woock.infra.repository;
 
 import static de.woock.domain.status.Vertragsart.FIRMENKUNDE;
 import static de.woock.domain.status.Vertragsart.PRIVATKUNDE;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.util.Optional;
@@ -14,9 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import de.woock.domain.Mitglied;
-import de.woock.domain.MitgliedsAntrag;
 import de.woock.domain.personalien.Adresse;
-import de.woock.infra.repository.MitgliederRepository;
 
 @DataJpaTest()
 @AutoConfigureTestDatabase(replace = NONE)
@@ -38,9 +36,9 @@ public class MitgliederRepositoryTest {
 		Optional<Mitglied> gefundenesMitglied = repo.findByUsernameIgnoreCase(username);
 
 		// then
-		assertThat(gefundenesMitglied).isNotNull();
-		assertThat(gefundenesMitglied.get()).isEqualTo(mitglied);
-		assertThat(gefundenesMitglied.get().getUsername()).isEqualTo(username);
+		then(gefundenesMitglied).isNotNull();
+		then(gefundenesMitglied.get()).isEqualTo(mitglied);
+		then(gefundenesMitglied.get().getUsername()).isEqualTo(username);
 	}
 	
 	@Test
@@ -52,7 +50,7 @@ public class MitgliederRepositoryTest {
 		Optional<Mitglied> gefundenesMitglied = repo.findByUsernameIgnoreCase(username);
 		
 		// then
-		assertThat(gefundenesMitglied).isEqualTo(Optional.empty());
+		then(gefundenesMitglied).isEqualTo(Optional.empty());
 	}
 	
 	@Test
@@ -69,8 +67,8 @@ public class MitgliederRepositoryTest {
 		Long anzahlPrivatkunden = repo.countByVertragsart(PRIVATKUNDE);
 
 		// then
-		assertThat(anzahlFirmenkunden).isEqualTo(4);
-		assertThat(anzahlPrivatkunden).isEqualTo(1);
+		then(anzahlFirmenkunden).isEqualTo(4);
+		then(anzahlPrivatkunden).isEqualTo(1);
 	}
 	
 	@Test
@@ -84,6 +82,6 @@ public class MitgliederRepositoryTest {
 		Long anzahlOrte = repo.anzahlOrte();
 		
 		// then
-		assertThat(anzahlOrte).isEqualTo(2);
+		then(anzahlOrte).isEqualTo(2);
 	}
 }

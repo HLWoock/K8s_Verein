@@ -44,7 +44,7 @@ public class VereinMVCController {
 	
 	@GetMapping("/antrag")
 	public ModelAndView antrag() {
-		ModelAndView view = new ModelAndView("antrag", "antrag", new MitgliedsAntrag("", "", "", "", "", ""));
+		ModelAndView view = new ModelAndView("antrag", "antrag", new MitgliedsAntrag("", "", "", "", "", "", ""));
 		return view;
 	}
 	

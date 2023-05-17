@@ -48,6 +48,6 @@ public class Mitglied extends Kopfdaten {
     }
     
     public Mitglied(@Valid MitgliedsAntrag antrag) {
-    	// TODO Auto-generated constructor stub
+    	username = antrag.username();
     }
 }
