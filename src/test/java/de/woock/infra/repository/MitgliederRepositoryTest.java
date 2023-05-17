@@ -1,4 +1,4 @@
-package de.woock.repository;
+package de.woock.infra.repository;
 
 import static de.woock.domain.status.Vertragsart.FIRMENKUNDE;
 import static de.woock.domain.status.Vertragsart.PRIVATKUNDE;
