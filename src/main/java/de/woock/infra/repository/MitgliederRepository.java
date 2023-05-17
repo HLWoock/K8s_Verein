@@ -10,13 +10,13 @@ import de.woock.domain.status.Vertragsart;
 
 public interface MitgliederRepository extends JpaRepository<Mitglied, Long> {
 	
-    @Query("SELECT COUNT(DISTINCT mc.ort) FROM Mitglied mt JOIN mt.adresse mc")
+	Optional<Mitglied> findByUsernameIgnoreCase(String username);
+	
+	long countByVertragsart(Vertragsart vertragsart);
+
+	@Query("SELECT COUNT(DISTINCT mc.ort) FROM Mitglied mt JOIN mt.adresse mc")
     long anzahlOrte();
     
-    long countByVertragsart(Vertragsart vertragsart);
 
-	Mitglied findByUsername(String name);
-	
-	Optional<Mitglied> findByUsernameIgnoreCase(String username);
 
 }

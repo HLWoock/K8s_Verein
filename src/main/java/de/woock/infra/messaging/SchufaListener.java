@@ -2,6 +2,8 @@ package de.woock.infra.messaging;
 
 import static de.woock.config.MessagingConfig.DEFAULT_PARSING_QUEUE;
 
+import java.util.Optional;
+
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +23,9 @@ public class SchufaListener {
 	@RabbitListener(queues = DEFAULT_PARSING_QUEUE)
 	public void processMessage(final Antwort antwort) {
 		log.info("Bonitiaetsanfrage fuer {} eingegangen", antwort.name());
-		Mitglied mitglied = mitgliederRepository.findByUsername(antwort.name());
-		if (mitglied != null) {
+		Optional<Mitglied> _mitglied = mitgliederRepository.findByUsernameIgnoreCase(antwort.name());
+		if (_mitglied.isPresent()) {
+			Mitglied mitglied = _mitglied.get();
 			mitglied.setBonitaet(antwort.bonitaet());
 			mitgliederRepository.save(mitglied);
 			log.info("Bonitaet von {} ist {}", mitglied.getName(), mitglied.getBonitaet());
