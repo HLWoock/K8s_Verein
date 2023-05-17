@@ -112,8 +112,14 @@ asciidoctorPdf {
 		  'idseparator': '-'
 	}
 }
+
+test {
+    useJUnitPlatform()
+    systemProperty "spring.profiles.active", "test"
+}
+
 bootBuildImage{ 
-  imageName = "oosemicro/k8s-verein:0.5.0"
+    imageName = "oosemicro/k8s-verein:0.5.0"
 }
 
 tasks.named('test') {

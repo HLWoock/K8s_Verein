@@ -15,13 +15,13 @@ spring:
     log-request-details: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb:3306/k8s_verein
     username: root
     password: admin
-    url: jdbc:mariadb://mariadb:3306/k8s_verein
   jpa:
     properties:
-      hibernate:
-        '[dialect:org.hibernate.dialect]': MariaDB103Dialect
+      hibernate: 
+        dialect: org.hibernate.dialect.MariaDB103Dialect
     hibernate:
       ddl-auto: create
     show-sql: false
