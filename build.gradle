@@ -61,6 +61,7 @@ dependencies {
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test',
 	                   'org.springframework.boot:spring-boot-testcontainers',
+	                   'org.testcontainers:mariadb:1.18.1',
 //	                   'org.springframework.cloud:spring-cloud-starter-contract-stub-runner',
 //	                   'org.springframework.cloud:spring-cloud-starter-contract-verifier',
                        'org.springframework.restdocs:spring-restdocs-mockmvc',
