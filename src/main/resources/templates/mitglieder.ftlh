@@ -31,6 +31,29 @@
 		<script type="text/javascript">
       		$(function(){$.get("http://localhost:9090/menu", function(data){$("#menudiv").html(data);});});
       	</script>
+      	
+  		<script type="text/javascript">
+      		$(function(){
+      			// Delete row on delete button click
+      			$(document).on("click", ".delete", function(){
+      		        $(this).parents("tr").remove();
+      				$(".add-new").removeAttr("disabled");
+      		    });
+      			// Edit row on edit button click
+      			$(document).on("click", ".edit", function(){		
+      		        $(this).parents("tr").find("td:not(:last-child)").each(function(){
+      					$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+      				});		
+      				$(this).parents("tr").find(".add, .edit").toggle();
+      				$(".add-new").attr("disabled", "disabled");
+      		    });      			
+      			// Show row on view button click
+      			$(document).on("click", ".view", function(){		
+      				var id = $(this).closest("tr").find("td:eq(0)").text();
+      				window.location.href = "http://localhost:8082/positionen/id/" + id;
+      		    });       		
+      		});
+  </script>      	
 
       	<title>Mitglieder</title>
    </head>   
@@ -76,6 +99,7 @@
 			        <th>Geburtsdatum</th>
 			        <th>Pr&uuml;fung der Bonit&auml;t</th>
 			        <th>Vertragsart</th>
+			        <th>Aktionen</th>
 			    </tr>
 			    <#list mitglieder as mitglied>
 					<tr>
@@ -85,6 +109,10 @@
 					    <td>${mitglied.geburtsdatum}</td>
 					    <td>${mitglied.bonitaet}</td>
 					    <td>${mitglied.vertragsart}</td>
+					    <td>
+					        <button type="button" class="edit materials-icons"><i class="fas fa-edit"></i></button>
+					        <button type="button" class="delete materials-icons"><i class="far fa-trash-alt"></i></button>
+					    </td>
 			        </tr>
 				</#list>
 			</table>
@@ -93,5 +121,12 @@
 		   		<button id="bottom" type="submit" background-color="blue">neues Mitglied aufnehmen</button>
 			</form>
 		</div>
+		
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="vendor/jquery/jquery.min.js"></script>
+	  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	
+	  <!-- Custom scripts for this template -->
+	  <script src="js/clean-blog.min.js"></script>		
    </body>   
 </html>
