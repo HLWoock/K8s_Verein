@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.0.6'
+	id 'org.springframework.boot' version '3.1.0'
 	id 'io.spring.dependency-management' version '1.1.0'
 	/*id 'org.springframework.cloud.contract' version '4.0.2'*/
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
@@ -29,7 +29,7 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator',
 	               'org.springframework.boot:spring-boot-starter-amqp',
 	               'org.springframework.boot:spring-boot-starter-data-jpa',
 	               'org.springframework.boot:spring-boot-starter-freemarker',
@@ -38,6 +38,8 @@ dependencies {
 	               'org.springframework.boot:spring-boot-starter-web',
 	               'io.micrometer:micrometer-tracing-bridge-brave',
 	               'io.zipkin.reporter2:zipkin-reporter-brave',
+	               'org.flywaydb:flyway-core',
+	               'org.flywaydb:flyway-mysql',
 	               'org.asciidoctor:asciidoctorj-pdf:2.3.4',
                    'org.asciidoctor:asciidoctorj-diagram:2.2.4',
                    'com.fasterxml.jackson.core:jackson-annotations:2.11.0',
@@ -58,6 +60,7 @@ dependencies {
 	                    'org.projectlombok:lombok'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test',
+	                   'org.springframework.boot:spring-boot-testcontainers',
 //	                   'org.springframework.cloud:spring-cloud-starter-contract-stub-runner',
 //	                   'org.springframework.cloud:spring-cloud-starter-contract-verifier',
                        'org.springframework.restdocs:spring-restdocs-mockmvc',
